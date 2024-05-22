@@ -1,8 +1,10 @@
 "use client";
 
-import { CldImage } from "next-cloudinary";
+import { CldImage, CldUploadWidgetInfo, CldUploadWidgetResults } from "next-cloudinary";
 import { CldUploadButton } from "next-cloudinary";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+
 
 export type UploadResult = {
   info: {
@@ -12,13 +14,23 @@ export type UploadResult = {
 };
 
 export default function Home() {
+  const router = useRouter();
   const [imageId, setImageId] = useState("");
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <CldUploadButton
-        onUpload={(result: UploadResult) => {
-          setImageId(result.info.public_id);
+        onUpload={(results: CldUploadWidgetResults) => {
+          if (results.info) {
+            const publicIds = Array.isArray(results.info)
+              ? results.info.map((info) => getPublicId(info))
+              : [getPublicId(results.info)];
+
+            console.log("refresh", publicIds);
+            setTimeout(() => {
+              router.refresh();
+            }, 1000)
+          }
         }}
         uploadPreset="wemndhbp"
       />
@@ -35,4 +47,12 @@ export default function Home() {
       )}
     </main>
   );
+}
+
+const getPublicId = (info: string | CldUploadWidgetInfo): string => {
+  if (typeof info === 'string') {
+    return info;
+  } else {
+    return info.public_id;
+  }
 }
