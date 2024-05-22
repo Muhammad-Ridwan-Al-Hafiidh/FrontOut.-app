@@ -1,4 +1,4 @@
-
+"use client"
 import { CldImage, CldUploadWidgetInfo, CldUploadWidgetResults } from "next-cloudinary";
 import { CldUploadButton } from "next-cloudinary";
 import { useRouter } from "next/navigation";
