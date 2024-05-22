@@ -1,4 +1,3 @@
-"use client"
 
 import { CldImage, CldImageProps } from "next-cloudinary"
 import React, { ComponentProps, useState, useTransition } from "react"
